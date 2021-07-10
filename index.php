@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,20 @@
 <body>
 <header>
     <h1>AllNews.com</h1>
-</header>    
+</header>
+
+<div class="article-container">
+    <?php
+
+    require 'mySQLconnect.php';
+
+    $selection = $mySQLconnect -> query('select * from noticias;')-> fetchAll();
+
+    print_r($selection);
+
+    ?>
+</div>
+
 </body>
 </html>
 

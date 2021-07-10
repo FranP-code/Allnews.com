@@ -12,6 +12,8 @@ header {
     padding-bottom: 4vh;
     display: flex;
     justify-content: center;
-    background-color: #00000020;
+    background-color: #00000050;
     color: white;
+    user-select: none;
 }
+
