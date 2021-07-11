@@ -50,19 +50,23 @@ header {
 
 
 .card {
-    padding-left: 2vw;
-    padding-right: 2vw;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
-    width: 70vw;
-    height: 13vh;
+    width: 74vw;
     background-color: #ffffff;
     border-radius: 15px;
+    display: flex;
+}
+
+.card .text {
+    margin-top: 2vh;
+    margin-right: 2vw;
+    width: calc(74vw - 150px - 6vw);
+    margin-bottom: 2vh;
 }
 
 .card h2 {
-    font-size: 30pt;
+    font-size: 24pt;
     margin-bottom: 1vh;
+
 }
 
 .card .bottom-part {
@@ -71,15 +75,21 @@ header {
 }
 
 .card img {
-    width: 70px;
-    height: 70px;
+    margin-left: 2vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    width: 150px;
+    height: 150px;
+    align-self: center;
     object-fit: cover;
     margin-right: 2vw;
+    border-radius: 3px;
 }
 
 .card h3 {
-    font-size: 11pt;
-    height: 7vh;
-    overflow: hidden;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: lighter;
+    font-size: 12pt;
+    color: #999999;
 }
 
