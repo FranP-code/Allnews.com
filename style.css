@@ -54,6 +54,7 @@ header {
     background-color: #ffffff;
     border-radius: 15px;
     display: flex;
+    margin-top: 2.5vh;
 }
 
 .card .text {

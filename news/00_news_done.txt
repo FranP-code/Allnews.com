@@ -1,0 +1,3 @@
+./news/aaa.html
+./news/bbb.html
+./news/ccc.html

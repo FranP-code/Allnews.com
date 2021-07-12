@@ -19,10 +19,9 @@
     <?php
 
     require 'mySQLconnect.php';
+    require 'news_logic.php';
 
-    $selection = $mySQLconnect -> query('select * from noticias;')-> fetchAll();
-
-    print_r($selection);
+    check_news();
 
     ?>
 
