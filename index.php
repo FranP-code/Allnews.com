@@ -18,7 +18,6 @@
 <div class="card-container">
     <?php
 
-    require 'mySQLconnect.php';
     require 'news_logic.php';
 
     check_news();
