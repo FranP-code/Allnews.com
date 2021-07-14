@@ -7,19 +7,15 @@ function check_news() {
     $news = glob('./news/*');
 
     foreach ($news as $news_unique) {
-        if ($news_unique !== './news/00_news_done.txt' && $news_unique !== './news/00_ids_done.txt' ){
+        if ($news_unique !== './control-files/00_news_done.txt' && $news_unique !== './control-files/00_ids_done.txt' ){
     
-            $news_done = file_get_contents('./news/00_news_done.txt');
+            $news_done = file_get_contents('./control-files/00_news_done.txt');
     
             if (!strstr($news_done, $news_unique)) {
                 $page = know_page($news_unique);
                 $author = know_author($page, $news_unique);
                 create_entry_in_DB($news_unique, $page, $author); //! HACER FUNCION
             }
-
-            /*if ($news_unique is in $done) {
-    
-            }*/
         }
     }
 }
@@ -81,7 +77,7 @@ function create_entry_in_DB($news_unique, $page, $author) {
             break;
     }
 
-    $insert_news = $mySQLconnect -> prepare('insert into noticias (title, content, icon_route, page, author, frist_paragraph) values (?, ?, ?, ?, ?, ?)');
+    $insert_news = $mySQLconnect -> prepare('insert into noticias (title, content, icon_route, page_source, author, frist_paragraph) values (?, ?, ?, ?, ?, ?)');
 
     $insert_news -> bindParam(1, $title, PDO::PARAM_STR);
     $insert_news -> bindParam(2, $inner_HTML, PDO::PARAM_STR);
@@ -92,11 +88,11 @@ function create_entry_in_DB($news_unique, $page, $author) {
     
     $insert_news -> execute();
 
-    $ids_done = file_get_contents('./news/00_ids_done.txt');
+    $ids_done = file_get_contents('./control-files/00_ids_done.txt');
     $num = $ids_done + 1;
-    file_put_contents('./news/00_ids_done.txt', $num);
+    file_put_contents('./control-files/00_ids_done.txt', $num);
     rename($news_unique,"./news/$num.html");
-    file_put_contents('./news/00_news_done.txt', "./news/$num.html", FILE_APPEND);
+    file_put_contents('./control-files/00_news_done.txt', " ./news/$num.html", FILE_APPEND);
 
 }
 
