@@ -21,6 +21,24 @@
     require 'news_logic.php';
 
     check_news();
+    
+    $news_per_page = 10;
+
+    $result = bring_the_news_back_home(1, $news_per_page);
+
+    foreach ($result as $news ) {
+        $title = $news[0];
+        $frist_p = $news[1];
+        $icon = $news[2];
+
+        echo "<div class='card'>
+        <img src=$icon>
+        <div class='text'>
+            <h2>$title</h2>
+            <h3>$frist_p</h3>
+        </div>
+    </div>";
+    }
 
     ?>
 

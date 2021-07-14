@@ -7,15 +7,12 @@ function check_news() {
     $news = glob('./news/*');
 
     foreach ($news as $news_unique) {
-        if ($news_unique !== './control-files/00_news_done.txt' && $news_unique !== './control-files/00_ids_done.txt' ){
+        $news_done = file_get_contents('./control-files/00_news_done.txt');
     
-            $news_done = file_get_contents('./control-files/00_news_done.txt');
-    
-            if (!strstr($news_done, $news_unique)) {
-                $page = know_page($news_unique);
-                $author = know_author($page, $news_unique);
-                create_entry_in_DB($news_unique, $page, $author); //! HACER FUNCION
-            }
+        if (!strstr($news_done, $news_unique)) {
+            $page = know_page($news_unique);
+            $author = know_author($page, $news_unique);
+            create_entry_in_DB($news_unique, $page, $author);
         }
     }
 }
@@ -64,8 +61,9 @@ function create_entry_in_DB($news_unique, $page, $author) {
 
     switch ($page) {
         case 'Xataka':
-            $title = get_string_between($content, '<h1><span>', '</span></h1>');
-            $pre_icon = get_string_between($content, '<div class="base-wrapper-image" style="padding-top: 61.38%;">', '</div>');
+            $pre_title = get_string_between($content, '<h1>', '</h1>');
+            $title = get_string_between($pre_title, '<span>', '</span>');
+            $pre_icon = get_string_between($content, '<img alt=', '>');
             $icon = get_string_between($pre_icon, 'src=', ' ');
             $inner_HTML = get_string_between($content, '<div class="article-content">', '<div class="article-content-outer">') . '<script id="script-estructurator" src="3lqzK81oyJW4C+q8OXEsRs7xuJco4Gz9ewZc993eBZwfxOqs3ToZOJ9KYmX5v0IEG83ds9TcRSvHyhztvNs9KyucmzRo7IxfonPGF+PFg99QZn3EOfTul3GeCApquf6/5WS70jg66hp3mYWfcpK5B5kbJWIF/NhXHUusw2jtsrw7MsZ0J3TzL0s/g9UZhj30/LtiHKDBL2nWtFVCo/MiOZcfRmMyFSi6QhJnoi7Ri5GcVHym6tCAUGXiPaAWEmikxfosgrUDyjUp4hCdos9jFEQO+G7DE50h3dKWIEKlrVPaDbygJA9d47TEvcSq7FTD1f3PnTeibUV+VBIi4ZgRpHrlk45FBUKvdxeGquoAvApW3734L0.js"></script>';
             $frist_p = strip_tags(get_string_between($inner_HTML, '<p>', '</p>'));
@@ -96,5 +94,22 @@ function create_entry_in_DB($news_unique, $page, $author) {
 
 }
 
+function bring_the_news_back_home($actual_page, $news_per_page) {
+    require './mySQLconnect.php';
+
+    $frist_calc = $actual_page * $news_per_page;
+    $second_calc = ($actual_page * $news_per_page) - $news_per_page;
+
+    $prepared_query = $mySQLconnect -> prepare("select title, frist_paragraph, icon_route from noticias where id < ? and id > ?");
+    $prepared_query -> bindParam(1, $frist_calc, PDO::PARAM_INT);
+    $prepared_query -> bindParam(2, $second_calc, PDO::PARAM_INT);
+    //$prepared_query -> execute(array($actual_page * 10, $actual_page * 10 - 10));
+
+    $prepared_query -> execute();
+
+    $return = $prepared_query -> fetchAll(); 
+    
+    return $return;
+}
 
 ?>
