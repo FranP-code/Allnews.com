@@ -52,7 +52,7 @@ function get_string_between($string, $start, $end){
     $ini += strlen($start);
     $len = strpos($string, $end, $ini) - $ini;
     return substr($string, $ini, $len);
-    //! CREDITS: https://stackoverflow.com/questions/5696412/how-to-get-a-substring-between-two-strings-in-phphttps://stackoverflow.com/questions/5696412/how-to-get-a-substring-between-two-strings-in-php
+    //! CREDITS: https://stackoverflow.com/a/9826656
 }
 
 function create_entry_in_DB($news_unique, $page, $author) {
@@ -100,7 +100,7 @@ function bring_the_news_back_home($actual_page, $news_per_page) {
     $frist_calc = $actual_page * $news_per_page;
     $second_calc = ($actual_page * $news_per_page) - $news_per_page;
 
-    $prepared_query = $mySQLconnect -> prepare("select title, frist_paragraph, icon_route from noticias where id < ? and id > ?");
+    $prepared_query = $mySQLconnect -> prepare("select id, title, frist_paragraph, icon_route from noticias where id < ? and id > ?");
     $prepared_query -> bindParam(1, $frist_calc, PDO::PARAM_INT);
     $prepared_query -> bindParam(2, $second_calc, PDO::PARAM_INT);
     //$prepared_query -> execute(array($actual_page * 10, $actual_page * 10 - 10));
@@ -109,6 +109,19 @@ function bring_the_news_back_home($actual_page, $news_per_page) {
 
     $return = $prepared_query -> fetchAll(); 
     
+    return $return;
+}
+
+function bring_the_choosen_one($id) {
+    require './mySQLconnect.php';
+
+    $prepared_query = $mySQLconnect -> prepare('select * from noticias where id = ?');
+    $prepared_query -> bindParam(1, $id, PDO::PARAM_INT);
+
+    $prepared_query -> execute();
+
+    $return = $prepared_query -> fetchAll();
+
     return $return;
 }
 

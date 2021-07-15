@@ -6,14 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All news</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./img/logo.svg">
 </head>
 <body>
+
 <header>
-    <div class="name">
+    <a href="index.php" class="name">
         <img class="logo" src="./img/logo.svg">
         <h1>AllNews.com</h1>
-    </div>
+    </a>
 </header>
+
+<noscript>
+    <div class="noscript">
+        Please, activate JavaScript for the correct functionality of the webpage.
+    </div>
+</noscript>
+
 
 <div class="card-container">
     <?php
@@ -27,17 +36,21 @@
     $result = bring_the_news_back_home(1, $news_per_page);
 
     foreach ($result as $news ) {
-        $title = $news[0];
-        $frist_p = $news[1];
-        $icon = $news[2];
+        $id = $news[0];
+        $title = $news[1];
+        $frist_p = $news[2];
+        $icon = $news[3];
 
-        echo "<div class='card'>
-        <img src=$icon>
-        <div class='text'>
-            <h2>$title</h2>
-            <h3>$frist_p</h3>
-        </div>
-    </div>";
+        echo
+            "<a href='news.php?id=$id' class='card-link'>
+                <div class='card'>
+                    <img src=$icon>
+                        <div class='text'>
+                            <h2>$title</h2>
+                            <h3>$frist_p</h3>
+                        </div>
+                </div>
+            </a>";
     }
 
     ?>
