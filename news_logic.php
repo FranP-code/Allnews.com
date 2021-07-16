@@ -19,10 +19,14 @@ function check_news() {
 
 function know_page($news_unique) {
     switch ($news_unique) {
-        case './news/xataka.html'|| './news/Xataka.html':
+        case $news_unique === './news/xataka.html'|| $news_unique === './news/Xataka.html':
             return 'Xataka';
             break;
-
+        
+        case $news_unique === './news/genbeta.html' || $news_unique === './news/Genbeta.html':
+            return 'Genbeta';
+            break;
+            
         default:
             return 0;
             break;
@@ -33,12 +37,18 @@ function know_author($page, $news_unique) {
     $content = file_get_contents($news_unique);
 
     switch ($page) {
-        case 'Xataka':
+        case $page === 'Xataka':
             $frist_cut = get_string_between($content, '<a class="article-author-link" ', '</a>');
             $second_cut = strrchr($frist_cut, '>');
             return str_replace('>', '', $second_cut);
             break;
         
+        case $page === 'Genbeta':
+            $frist_cut = get_string_between($content, '<a class="article-author-link" ', '</a>');
+            $second_cut = strrchr($frist_cut, '>');
+            return str_replace('>', '', $second_cut);
+            break;
+
         default:
             return 0;
             break;
@@ -60,12 +70,21 @@ function create_entry_in_DB($news_unique, $page, $author) {
     $content = file_get_contents($news_unique);
 
     switch ($page) {
-        case 'Xataka':
+        case $page === 'Xataka':
             $pre_title = get_string_between($content, '<h1>', '</h1>');
             $title = get_string_between($pre_title, '<span>', '</span>');
             $pre_icon = get_string_between($content, '<img alt=', '>');
             $icon = get_string_between($pre_icon, 'src=', ' ');
-            $inner_HTML = get_string_between($content, '<div class="article-content">', '<div class="article-content-outer">') . '<script id="script-estructurator" src="3lqzK81oyJW4C+q8OXEsRs7xuJco4Gz9ewZc993eBZwfxOqs3ToZOJ9KYmX5v0IEG83ds9TcRSvHyhztvNs9KyucmzRo7IxfonPGF+PFg99QZn3EOfTul3GeCApquf6/5WS70jg66hp3mYWfcpK5B5kbJWIF/NhXHUusw2jtsrw7MsZ0J3TzL0s/g9UZhj30/LtiHKDBL2nWtFVCo/MiOZcfRmMyFSi6QhJnoi7Ri5GcVHym6tCAUGXiPaAWEmikxfosgrUDyjUp4hCdos9jFEQO+G7DE50h3dKWIEKlrVPaDbygJA9d47TEvcSq7FTD1f3PnTeibUV+VBIi4ZgRpHrlk45FBUKvdxeGquoAvApW3734L0.js"></script>';
+            $inner_HTML = get_string_between($content, '<div class="article-content">', '<div class="article-content-outer">') . '<script id="script-estructurator" src="./scripts/xataka.js"></script>';
+            $frist_p = strip_tags(get_string_between($inner_HTML, '<p>', '</p>'));
+            break;
+        
+        case $page === 'Genbeta':
+            $pre_title = get_string_between($content, '<h1>', '</h1>');
+            $title = get_string_between($pre_title, '<span>', '</span>');
+            $pre_icon = get_string_between($content, '<img alt=', '>');
+            $icon = get_string_between($pre_icon, 'src=', ' ');
+            $inner_HTML = get_string_between($content, '<div class="article-content">', '<div class="article-content-outer">') . '<script id="script-estructurator" src="./scripts/genbeta.js"></script>';
             $frist_p = strip_tags(get_string_between($inner_HTML, '<p>', '</p>'));
             break;
         

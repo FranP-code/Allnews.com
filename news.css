@@ -59,6 +59,10 @@ header {
     border: solid #a1c7e0 1px ;
 }
 
+img {
+    user-select: none;
+}
+
 article img {
     width: 100%;
     height: 100%;
