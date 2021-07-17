@@ -32,6 +32,10 @@ function know_page($news_unique) {
         case $news_unique === './news/infobae.html' || $news_unique === './news/Infobae.html':
             return 'Infobae';
             break;
+        
+        case $news_unique === './news/tn.html' || $news_unique === './news/TN.html' || $news_unique === './news/Tn.html':
+            return 'TN';
+            break;
 
         default:
             return 0;
@@ -59,6 +63,10 @@ function know_author($page, $news_unique) {
             return $author = get_string_between($content, ',t.authors="', '",');
             break;
 
+        case $page === 'TN':
+            return $author = 0;
+            break;
+        
         default:
             return 0;
             break;
@@ -106,11 +114,18 @@ function create_entry_in_DB($news_unique, $page, $author) {
             $frist_p = get_string_between($content, '<meta property="og:description" content="', '">');
             break;
         
+        case $page === 'TN':
+            $title = get_string_between($content, '</script><title itemProp="name" lang="es">', ' | TN</title>');
+            $icon = get_string_between($content, '<source type="image/jpg" srcSet="', '"');
+            $inner_HTML = get_string_between($content, '<main class="col-content">', '</main>') . '<script id="script-estructurador" src="./scripts/tn.js"></script>';
+            $frist_p = get_string_between($content, ',"description":"', '","articleBody":"');
+            break;
         default:
             echo 0;
             return 0;
             break;
     }
+
     $title;
     $icon;
     $inner_HTML;
