@@ -40,6 +40,7 @@
         $title = $news[1];
         $frist_p = $news[2];
         $icon = $news[3];
+        $source = $news[4];
 
         echo
             "<a href='news.php?id=$id' class='card-link'>
@@ -48,6 +49,7 @@
                         <div class='text'>
                             <h2>$title</h2>
                             <h3>$frist_p</h3>
+                            <div class='source'>$source</div>
                         </div>
                 </div>
             </a>";

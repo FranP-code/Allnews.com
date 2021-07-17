@@ -1,5 +1,7 @@
 <?php
 
+use JetBrains\PhpStorm\Internal\ReturnTypeContract;
+
 error_reporting(~0);
 ini_set('display_errors', 1);
 
@@ -26,7 +28,11 @@ function know_page($news_unique) {
         case $news_unique === './news/genbeta.html' || $news_unique === './news/Genbeta.html':
             return 'Genbeta';
             break;
-            
+
+        case $news_unique === './news/infobae.html' || $news_unique === './news/Infobae.html':
+            return 'Infobae';
+            break;
+
         default:
             return 0;
             break;
@@ -47,6 +53,10 @@ function know_author($page, $news_unique) {
             $frist_cut = get_string_between($content, '<a class="article-author-link" ', '</a>');
             $second_cut = strrchr($frist_cut, '>');
             return str_replace('>', '', $second_cut);
+            break;
+
+        case $page === 'Infobae':
+            return $author = get_string_between($content, ',t.authors="', '",');
             break;
 
         default:
@@ -87,12 +97,24 @@ function create_entry_in_DB($news_unique, $page, $author) {
             $inner_HTML = get_string_between($content, '<div class="article-content">', '<div class="article-content-outer">') . '<script id="script-estructurator" src="./scripts/genbeta.js"></script>';
             $frist_p = strip_tags(get_string_between($inner_HTML, '<p>', '</p>'));
             break;
+
+        case $page === 'Infobae':
+            $title = get_string_between($content, '<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>', '- Infobae</title>');
+            $pre_icon = get_string_between($content, '<div class="visual__image ">', '</div>');
+            $icon = get_string_between($pre_icon, '992w,', ' 1200w" ');
+            $inner_HTML = get_string_between($content, '<section class="article-section page-container">', '</section>') . '<script id="script-estructurador" src="./scripts/infobae.js"></script>';
+            $frist_p = get_string_between($content, '<meta property="og:description" content="', '">');
+            break;
         
         default:
             echo 0;
             return 0;
             break;
     }
+    $title;
+    $icon;
+    $inner_HTML;
+    $frist_p;
 
     $insert_news = $mySQLconnect -> prepare('insert into noticias (title, content, icon_route, page_source, author, frist_paragraph) values (?, ?, ?, ?, ?, ?)');
 
@@ -119,7 +141,7 @@ function bring_the_news_back_home($actual_page, $news_per_page) {
     $frist_calc = $actual_page * $news_per_page;
     $second_calc = ($actual_page * $news_per_page) - $news_per_page;
 
-    $prepared_query = $mySQLconnect -> prepare("select id, title, frist_paragraph, icon_route from noticias where id < ? and id > ?");
+    $prepared_query = $mySQLconnect -> prepare("select id, title, frist_paragraph, icon_route, page_source from noticias where id < ? and id > ?");
     $prepared_query -> bindParam(1, $frist_calc, PDO::PARAM_INT);
     $prepared_query -> bindParam(2, $second_calc, PDO::PARAM_INT);
     //$prepared_query -> execute(array($actual_page * 10, $actual_page * 10 - 10));

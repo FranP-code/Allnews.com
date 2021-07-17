@@ -80,6 +80,8 @@ header {
     margin-right: 2vw;
     width: calc(74vw - 150px - 6vw);
     margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .card h2 {
@@ -113,3 +115,7 @@ header {
     color: #797979;
 }
 
+.card .source {
+    align-self: flex-end;
+    flex-grow: 1;
+}
