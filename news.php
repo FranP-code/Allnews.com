@@ -41,7 +41,16 @@
     </div>
 
     <div class="source">
-        Autor: <b><?php echo $author;?></b> | Pagina fuente: <b><?php echo $page_source;?></b>
+        <?php
+            if ($author) {
+                echo "Autor: <b>$author</b> | ";
+            }
+
+            echo "Pagina fuente: <b>$page_source</b>";
+
+        ?>
+
+        <!-- Autor: <b><?php echo $author;?></b> | Pagina fuente: <b><?php echo $page_source;?></b> -->
     </div>
 </body>
 </html>

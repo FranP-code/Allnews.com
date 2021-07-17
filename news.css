@@ -93,3 +93,8 @@ article {
     padding-bottom: 1vh;
     border: solid #a1c7e0 1px ;
 }
+
+figcaption {
+    color: #797979;
+    margin-bottom: 3vh;
+}
