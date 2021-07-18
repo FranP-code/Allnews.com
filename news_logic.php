@@ -116,7 +116,7 @@ function create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute) {
             break;
 
         case $page === 'Infobae':
-            $title = get_string_between($content, '<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>', '- Infobae</title>');
+            $title = get_string_between($content, '<html lang="es"><head><title>', '- Infobae</title>');
             $pre_icon = get_string_between($content, '<div class="visual__image ">', '</div>');
             $icon = get_string_between($pre_icon, '992w,', ' 1200w" ');
             $inner_HTML = get_string_between($content, '<section class="article-section page-container">', '</section>') . '<script id="script-estructurador" src="./scripts/infobae.js"></script>';
