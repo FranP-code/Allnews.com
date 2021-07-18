@@ -29,11 +29,13 @@
 
     require 'news_logic.php';
 
-    check_news();
+    $actual_page = 1;
     
     $news_per_page = 10;
 
-    $result = bring_the_news_back_home(1, $news_per_page);
+    check_news($news_per_page, 'mySQLconnect.php');
+
+    $result = bring_the_news_back_home($actual_page, $news_per_page, 'mySQLconnect.php');
 
     foreach ($result as $news ) {
         $id = $news[0];
@@ -53,19 +55,41 @@
                         </div>
                 </div>
             </a>";
-    }
+    
+        }
 
     ?>
 
-    <div class="card">
-        <img src="./img/test.jpg">
-        <div class="text">
-            <h2>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis expedita repellendus sunt modi sint earum atque nihil porro neque, excepturi doloremque deserunt nesciunt nemo dolores, veniam error possimus non. Facere.</h2>
-            <h3>Content... Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut numquam accusamus, voluptas vel et corrupti, dolore maxime ipsum veritatis quae obcaecati magni provident iure possimus praesentium animi debitis, quos consequuntur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, reprehenderit. Voluptatem inventore est necessitatibus blanditiis? Voluptatem pariatur fuga officiis minus, excepturi laudantium assumenda enim, rem officia quis obcaecati facilis consequuntur? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur facilis odio blanditiis perspiciatis quaerat quos magni dolor praesentium repellat officia fugit eum natus, impedit quis, quo optio? Similique, temporibus delectus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque dicta quia minima! Harum, alias maxime, architecto debitis distinctio amet assumenda, fugiat iure quis nesciunt ut laboriosam rem voluptatibus aspernatur nobis!</h3>
-        </div>
-    </div>
-</div>
+<footer class="pagination">
+    <?php
+
+    $pages = glob('./pages/pages-*.php');
+    $c = 0;
+
+    foreach($pages as $page) {
+        $c++;
+
+        if ($c === $actual_page) {
+            echo "
+                <a class='page-disabled'>
+                    <div class='page'>
+                        $c
+                    </div>
+                </a>
+            ";
+        } else {
+            echo "
+                <a href='$page'>
+                    <div class='page'>
+                        $c
+                    </div>
+                </a>
+            ";
+        }
+    }
+
+    ?>
+</footer>
 
 </body>
 </html>
-

@@ -9,7 +9,7 @@
         <?php
             require 'news_logic.php';
 
-            $requestFromDB = bring_the_choosen_one($_GET['id'])[0];
+            $requestFromDB = bring_the_choosen_one($_GET['id'], './mySQLconnect.php')[0];
 
             $title = $requestFromDB['title'];
             $content = $requestFromDB['content'];

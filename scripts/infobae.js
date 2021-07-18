@@ -26,7 +26,7 @@ console.log(all);
 //todo - Purificacion de la informacion
 
 for (let i = 0; i < paragraphs.length; i++) {
-    if (paragraphs[i].innerHTML == "<b>SEGUIR LEYENDO:</b>" || paragraphs[i].innerHTML == "<b>SEGUIR LEYENDO</b>" || paragraphs[i].innerHTML == "<br>") {
+    if (paragraphs[i].innerHTML == "<b>SEGUIR LEYENDO:</b>" || paragraphs[i].innerHTML == "<b>SEGUIR LEYENDO</b>" || paragraphs[i].innerHTML == "<br>" || paragraphs[i].innerHTML == '<b>Seguir leyendo:</b>') {
         console.log("AAAAA");
         trash.push(paragraphs[i])
 

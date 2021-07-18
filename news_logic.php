@@ -5,17 +5,26 @@ use JetBrains\PhpStorm\Internal\ReturnTypeContract;
 error_reporting(~0);
 ini_set('display_errors', 1);
 
-function check_news() {
+
+function check_news($news_per_page, $mySQLconnectRoute) {
     $news = glob('./news/*');
+
+    $control_variable = 0;
 
     foreach ($news as $news_unique) {
         $news_done = file_get_contents('./control-files/00_news_done.txt');
     
         if (!strstr($news_done, $news_unique)) {
+            $control_variable = 5;
+
             $page = know_page($news_unique);
             $author = know_author($page, $news_unique);
-            create_entry_in_DB($news_unique, $page, $author);
+            create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute);
         }
+    }
+    
+    if ($control_variable == 5) {
+        create_new_pages(count($news), $news_per_page);
     }
 }
 
@@ -83,8 +92,8 @@ function get_string_between($string, $start, $end){
     //! CREDITS: https://stackoverflow.com/a/9826656
 }
 
-function create_entry_in_DB($news_unique, $page, $author) {
-    require 'mySQLconnect.php';
+function create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute) {
+    require $mySQLconnectRoute;
     $content = file_get_contents($news_unique);
 
     switch ($page) {
@@ -111,7 +120,7 @@ function create_entry_in_DB($news_unique, $page, $author) {
             $pre_icon = get_string_between($content, '<div class="visual__image ">', '</div>');
             $icon = get_string_between($pre_icon, '992w,', ' 1200w" ');
             $inner_HTML = get_string_between($content, '<section class="article-section page-container">', '</section>') . '<script id="script-estructurador" src="./scripts/infobae.js"></script>';
-            $frist_p = get_string_between($content, '<meta property="og:description" content="', '">');
+            $frist_p = get_string_between($content, '<meta property="og:description" content="', '"/><meta ');
             break;
         
         case $page === 'TN':
@@ -150,10 +159,26 @@ function create_entry_in_DB($news_unique, $page, $author) {
 
 }
 
-function bring_the_news_back_home($actual_page, $news_per_page) {
-    require './mySQLconnect.php';
+function create_new_pages($cant_news, $news_per_page) {
+    require './pages/print_page_data.php';
 
-    $frist_calc = $actual_page * $news_per_page;
+    $cant_pages = ceil($cant_news / $news_per_page);
+    
+    for ($i=0; $i < $cant_pages; $i++) { 
+        $num = $i + 1;
+        file_put_contents("./pages/pages-$num.php", file_get_contents('./pages/template.html'));
+        foreach( php_code($num, $news_per_page) as $block){
+           file_put_contents("./pages/pages-$num.php", $block, FILE_APPEND);
+        }
+        //file_put_contents("./pages/pages-$num.php", print_template($num)[2], FILE_APPEND);
+
+    }
+}
+
+function bring_the_news_back_home($actual_page, $news_per_page, $mySQLconnectRoute) {
+    require $mySQLconnectRoute;
+
+    $frist_calc = ($actual_page * $news_per_page) + 1;
     $second_calc = ($actual_page * $news_per_page) - $news_per_page;
 
     $prepared_query = $mySQLconnect -> prepare("select id, title, frist_paragraph, icon_route, page_source from noticias where id < ? and id > ?");
@@ -168,8 +193,8 @@ function bring_the_news_back_home($actual_page, $news_per_page) {
     return $return;
 }
 
-function bring_the_choosen_one($id) {
-    require './mySQLconnect.php';
+function bring_the_choosen_one($id, $mySQLconnectRoute) {
+    require $mySQLconnectRoute;
 
     $prepared_query = $mySQLconnect -> prepare('select * from noticias where id = ?');
     $prepared_query -> bindParam(1, $id, PDO::PARAM_INT);
