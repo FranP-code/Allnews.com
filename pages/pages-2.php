@@ -32,6 +32,12 @@
     
         $news_per_page = 10;
         $result = bring_the_news_back_home($actual_page, $news_per_page, "../mySQLconnect.php");
+
+        if (count($result) <= 3) {
+            echo "<style>html {
+                background: rgb(157,211,255);
+            }</style>";
+        }
             
         
         

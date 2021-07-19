@@ -34,9 +34,15 @@
     $news_per_page = 10;
 
     check_news($news_per_page, 'mySQLconnect.php');
-
+    
     $result = bring_the_news_back_home($actual_page, $news_per_page, 'mySQLconnect.php');
-
+    
+    if (count($result) <= 4) {
+        echo '<style>html {
+            background: red;
+        }</style>';
+    }
+    
     foreach ($result as $news ) {
         $id = $news[0];
         $title = $news[1];
@@ -65,6 +71,7 @@
 
     $pages = glob('./pages/pages-*.php');
     $c = 0;
+
 
     foreach($pages as $page) {
         $c++;
