@@ -98,3 +98,11 @@ figcaption {
     color: #797979;
     margin-bottom: 3vh;
 }
+
+iframe {
+    /*! RELACIÓN 16:9 ENTRE ANCHO Y ALTO, EL CONTENIDO TIENE 56 VW DE ANCHO. POR LO TANTO, EL ALTO DEBE SER DE 32 VW PARA QUE EL VIDEO EMBEBIDO TENGA EL TAMAÑO ADECUADO PARA EL RATO 16:9*/ 
+
+    width: 100% !important;
+    height: 32vw !important;
+    border: none;
+}

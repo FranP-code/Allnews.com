@@ -19,7 +19,8 @@ function check_news($news_per_page, $mySQLconnectRoute) {
 
             $page = know_page($news_unique);
             $author = know_author($page, $news_unique);
-            create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute);
+            $page_data = get_contents($news_unique, $page, $author);
+            create_entry_in_DB($mySQLconnectRoute, $page_data, $news_unique);
         }
     }
     
@@ -92,8 +93,7 @@ function get_string_between($string, $start, $end){
     //! CREDITS: https://stackoverflow.com/a/9826656
 }
 
-function create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute) {
-    require $mySQLconnectRoute;
+function get_contents($news_unique, $page, $author) {
     $content = file_get_contents($news_unique);
 
     switch ($page) {
@@ -135,10 +135,32 @@ function create_entry_in_DB($news_unique, $page, $author, $mySQLconnectRoute) {
             break;
     }
 
-    $title;
-    $icon;
-    $inner_HTML;
-    $frist_p;
+    return [
+        'title' => $title,
+        'inner_HTML' => $inner_HTML,
+        'icon' => $icon,
+        'page_source' => $page,
+        'author' => $author,
+        'frist_p' => $frist_p
+    ];
+
+}
+
+function create_entry_in_DB($mySQLconnectRoute, $page_data, $news_unique) {
+    require $mySQLconnectRoute;
+
+    //* ASIGNACIÓN DE VARIABLES
+
+    $title = $page_data['title'];
+    $inner_HTML = $page_data['inner_HTML'];
+
+    $icon = $page_data['icon'];
+    $page = $page_data['page_source'];
+
+    $author = $page_data['author'];
+    $frist_p = $page_data['frist_p'];
+
+    //* QUERY A LA DB
 
     $insert_news = $mySQLconnect -> prepare('insert into noticias (title, content, icon_route, page_source, author, frist_paragraph) values (?, ?, ?, ?, ?, ?)');
 
